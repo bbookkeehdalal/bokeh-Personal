@@ -113,43 +113,145 @@
       animation: shrinkToHeader 1.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
     }
 
-    @keyframes shrinkToHeader {
-      from {
-        top: 50%;
-        transform: translate(-50%, -50%) scale(1);
-      }
-      to {
-        top: 6px;
-        transform: translate(-50%, -20px) scale(0.58);
-        max-width: 300px;
-        opacity: 1;
-        visibility: visible;
-      }
-    }
+@keyframes shrinkToHeader {
+  from {
+    top: 50%;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  to {
+    top: 0px;
+    transform: translate(-50%, -16px) scale(0.65);
+    max-width: 300px;
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
 
     #splash-logo.fade-out-splash {
       transition: opacity 0.3s ease;
       opacity: 0;
     }
 
-    #header-logo {
-      position: fixed;
-      top: 6px;
-      left: 50%;
-      transform: translate(-50%, -20px) scale(0.58);
-      max-width: 300px;
-      width: 80%;
-      height: auto;
-      z-index: 50;
-      opacity: 0;
-      mix-blend-mode: multiply;
-      cursor: default;
-      transition: opacity 0.5s ease;
-    }
+    .header-nav-row {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
 
-    #header-logo.visible {
-      opacity: 1;
-    }
+  width: min(94vw, 560px);
+  height: 78px;
+
+  display: grid;
+  grid-template-columns: 1fr 210px 1fr;
+  align-items: center;
+
+  pointer-events: none;
+}
+
+.header-side-link {
+  pointer-events: auto;
+  font-size: 9px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  width: 86px;
+  text-align: center;
+  white-space: nowrap;
+  color: rgba(255,255,255,0.7);
+}
+
+#about-scroll-btn {
+  justify-self: start;
+}
+
+#contact-scroll-btn {
+  justify-self: end;
+}
+
+#header-logo {
+  position: static !important;
+  top: auto !important;
+  left: auto !important;
+
+  width: 210px;
+  max-width: 210px;
+  height: auto;
+
+  justify-self: center;
+  transform: translateY(-16px) scale(1) !important;
+
+  z-index: 50;
+  opacity: 0;
+  mix-blend-mode: screen;
+  cursor: default;
+  transition: opacity 0.5s ease;
+}
+
+#header-logo.visible {
+  opacity: 1;
+}
+
+@media (max-width: 430px) {
+  .header-nav-row {
+    width: min(94vw, 390px);
+    grid-template-columns: 1fr 170px 1fr;
+    height: 74px;
+  }
+
+  .header-side-link {
+    width: 74px;
+    font-size: 8.5px;
+    letter-spacing: 0.24em;
+  }
+
+  #header-logo {
+    width: 170px;
+    max-width: 170px;
+    transform: translateY(-13px) scale(1) !important;
+  }
+}
+
+@media (min-width: 431px) and (max-width: 767px) {
+  .header-nav-row {
+    width: min(94vw, 460px);
+    grid-template-columns: 1fr 185px 1fr;
+    height: 76px;
+  }
+
+  .header-side-link {
+    width: 80px;
+    font-size: 9px;
+    letter-spacing: 0.26em;
+  }
+
+  #header-logo {
+    width: 185px;
+    max-width: 185px;
+    transform: translateY(-14px) scale(1) !important;
+  }
+}
+
+@media (min-width: 768px) {
+  .header-nav-row {
+    width: min(82vw, 560px);
+    grid-template-columns: 1fr 220px 1fr;
+    height: 82px;
+  }
+
+  .header-side-link {
+    width: 90px;
+    font-size: 9.5px;
+    letter-spacing: 0.3em;
+  }
+
+  #header-logo {
+    width: 220px;
+    max-width: 220px;
+    transform: translateY(-16px) scale(1) !important;
+  }
+}
+    
 
     .filter-chip {
       transition: color 0.12s ease, opacity 0.12s ease;
@@ -531,16 +633,20 @@
 
   <div id="app" class="min-h-full flex flex-col">
     <header class="fixed top-0 left-0 right-0 z-40 bg-[#f8f8f5]/90 backdrop-blur-sm">
-      <div class="relative flex items-center justify-center py-6 px-4">
-        <button id="about-scroll-btn" class="filter-chip fixed left-5 top-0 translate-y-[30px] z-[9999] px-2.5 py-1 text-[9px] tracking-[0.28em] uppercase border border-black/30 rounded-full text-black/70 hover:text-black hover:border-black/50 whitespace-nowrap w-[86px] text-center">About</button>
+      <div class="relative flex flex-col items-center justify-center py-6 px-4">
+  <div class="header-nav-row">
+    <button id="about-scroll-btn" class="filter-chip header-side-link">About</button>
 
-        <img id="header-logo" src="./assets/logo2.png" alt="Bokeh Life & Travel">
+    <img id="header-logo" src="./assets/logo.png" alt="Bokeh by Saad">
 
-        <p id="tagline" class="font-body text-[10px] md:text-xs tracking-[0.4em] text-black/45 mt-1 uppercase" style="margin-top: 45px;">Life & Travel</p>
-      </div>
+    <button id="contact-scroll-btn" class="filter-chip header-side-link">Contact</button>
+  </div>
 
-      <button id="contact-scroll-btn" class="filter-chip fixed right-5 top-0 translate-y-[30px] z-[9999] px-2.5 py-1 text-[9px] tracking-[0.28em] uppercase border border-black/30 rounded-full text-black/70 hover:text-black hover:border-black/50 whitespace-nowrap w-[86px] text-center">Contact</button>
-
+  <p id="tagline" class="font-body text-[10px] md:text-xs tracking-[0.4em] text-white/40 uppercase" style="margin-top: 45px;">
+    Commercial Shoots
+  </p>
+</div>
+      
       <div id="filter-bar" class="w-full px-4 pb-4">
         <div class="flex flex-wrap justify-center items-center gap-x-4 gap-y-4 w-full max-w-full" id="filter-container"></div>
       </div>
