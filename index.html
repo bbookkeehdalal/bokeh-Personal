@@ -1,5 +1,4 @@
 
-
 <!doctype html>
 <html lang="en" class="h-full">
 <head>
@@ -155,8 +154,8 @@
       }
 
       to {
-        top: 24px;
-        transform: translate(-50%, -8px) scale(0.65);
+        top: 0px;
+        transform: translate(-50%, -20px) scale(0.65);
         max-width: 300px;
         opacity: 1;
         visibility: visible;
@@ -168,54 +167,14 @@
       transition: none !important;
     }
 
-    .header-nav-row {
-      position: fixed;
-      top: 24px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 9999;
-
-      width: min(92vw, 520px);
-      height: 70px;
-
-      display: grid;
-      grid-template-columns: 1fr 190px 1fr;
-      align-items: center;
-
-      pointer-events: none;
-    }
-
-    .header-side-link {
-      pointer-events: auto;
-      font-size: 9px;
-      letter-spacing: 0.28em;
-      text-transform: uppercase;
-      width: 86px;
-      text-align: center;
-      white-space: nowrap;
-      color: rgba(0,0,0,0.48);
-    }
-
-    #about-scroll-btn {
-      justify-self: start;
-    }
-
-    #contact-scroll-btn {
-      justify-self: end;
-    }
-
     #header-logo {
-      position: static !important;
-      top: auto !important;
-      left: auto !important;
-
-      width: 190px;
-      max-width: 190px;
+      position: fixed;
+      top: 0px;
+      left: 50%;
+      transform: translate(-50%, -20px) scale(0.65);
+      max-width: 300px;
+      width: 80%;
       height: auto;
-
-      justify-self: center;
-      transform: translateY(-8px) scale(1) !important;
-
       z-index: 50;
       opacity: 0;
       mix-blend-mode: multiply;
@@ -225,90 +184,6 @@
 
     #header-logo.visible {
       opacity: 1;
-    }
-
-    @media (max-width: 430px) {
-      .header-nav-row {
-        top: 24px;
-        width: min(92vw, 390px);
-        grid-template-columns: 1fr 178px 1fr;
-        height: 68px;
-      }
-
-      .header-side-link {
-        width: 78px;
-        font-size: 8.5px;
-        letter-spacing: 0.26em;
-      }
-
-      #header-logo {
-        width: 178px;
-        max-width: 178px;
-        transform: translateY(-7px) scale(1) !important;
-      }
-    }
-
-    @media (min-width: 431px) and (max-width: 767px) {
-      .header-nav-row {
-        top: 24px;
-        width: min(92vw, 470px);
-        grid-template-columns: 1fr 190px 1fr;
-        height: 70px;
-      }
-
-      .header-side-link {
-        width: 84px;
-        font-size: 9px;
-        letter-spacing: 0.28em;
-      }
-
-      #header-logo {
-        width: 190px;
-        max-width: 190px;
-        transform: translateY(-8px) scale(1) !important;
-      }
-    }
-
-    @media (min-width: 768px) {
-      .header-nav-row {
-        top: 24px;
-        width: min(76vw, 620px);
-        grid-template-columns: 1fr 220px 1fr;
-        height: 74px;
-      }
-
-      .header-side-link {
-        width: 100px;
-        font-size: 10px;
-        letter-spacing: 0.32em;
-      }
-
-      #header-logo {
-        width: 220px;
-        max-width: 220px;
-        transform: translateY(-8px) scale(1) !important;
-      }
-    }
-
-    @media (min-width: 1100px) {
-      .header-nav-row {
-        top: 24px;
-        width: 660px;
-        grid-template-columns: 1fr 230px 1fr;
-        height: 76px;
-      }
-
-      .header-side-link {
-        width: 110px;
-        font-size: 10.5px;
-        letter-spacing: 0.34em;
-      }
-
-      #header-logo {
-        width: 230px;
-        max-width: 230px;
-        transform: translateY(-8px) scale(1) !important;
-      }
     }
 
     .filter-chip {
@@ -444,40 +319,6 @@
       opacity: 1;
     }
 
-    #portfolio-section {
-      width: 100%;
-      padding-left: 0 !important;
-      padding-right: 0 !important;
-      margin-top: 0 !important;
-    }
-
-    #portfolio-grid {
-      width: 100%;
-      max-width: none;
-      margin-left: auto !important;
-      margin-right: auto !important;
-    }
-
-    @media (min-width: 1024px) {
-      #portfolio-grid.mosaic-grid {
-        column-count: 4 !important;
-        column-gap: 10px !important;
-        padding: 10px !important;
-        width: min(100%, 980px) !important;
-        max-width: 980px !important;
-        margin-left: auto !important;
-        margin-right: auto !important;
-      }
-    }
-
-    @media (min-width: 1400px) {
-      #portfolio-grid.mosaic-grid {
-        column-count: 5 !important;
-        width: min(100%, 1180px) !important;
-        max-width: 1180px !important;
-      }
-    }
-
     #scroll-to-top {
       transition: opacity 0.22s ease, transform 0.22s ease;
       opacity: 0;
@@ -549,26 +390,22 @@
 
   <div id="app" class="min-h-full flex flex-col">
     <header class="fixed top-0 left-0 right-0 z-40 bg-[#f8f8f5]/90 backdrop-blur-sm">
-      <div class="relative flex flex-col items-center justify-center py-6 px-4">
-        <div class="header-nav-row">
-          <button id="about-scroll-btn" class="filter-chip header-side-link">About</button>
+      <div class="relative flex items-center justify-center py-6 px-4">
+        <button id="about-scroll-btn" class="filter-chip fixed left-5 top-0 translate-y-[30px] z-[9999] px-2.5 py-1 text-[9px] tracking-[0.28em] uppercase border border-black/30 rounded-full text-black/60 hover:text-black hover:border-black/50 whitespace-nowrap w-[86px] text-center">About</button>
 
-          <img id="header-logo" src="./assets/logo2.png" alt="Bokeh Life & Travel">
+        <img id="header-logo" src="./assets/logo2.png" alt="Bokeh Life & Travel">
 
-          <button id="contact-scroll-btn" class="filter-chip header-side-link">Contact</button>
-        </div>
-
-        <p id="tagline" class="font-body text-[10px] md:text-xs tracking-[0.4em] text-black/45 uppercase" style="margin-top: 70px;">
-          Life & Travel
-        </p>
+        <p id="tagline" class="font-body text-[10px] md:text-xs tracking-[0.4em] text-black/45 mt-1 uppercase" style="margin-top: 45px;">Life & Travel</p>
       </div>
+
+      <button id="contact-scroll-btn" class="filter-chip fixed right-5 top-0 translate-y-[30px] z-[9999] px-2.5 py-1 text-[9px] tracking-[0.28em] uppercase border border-black/30 rounded-full text-black/60 hover:text-black hover:border-black/50 whitespace-nowrap w-[86px] text-center">Contact</button>
 
       <div id="filter-bar" class="w-full px-4 pb-4">
         <div class="flex flex-wrap justify-center items-center gap-x-4 gap-y-4 w-full max-w-full" id="filter-container"></div>
       </div>
     </header>
 
-    <main id="main-content" class="flex-1 pt-44 md:pt-48">
+    <main id="main-content" class="flex-1 pt-48 md:pt-52">
       <section id="portfolio-section" class="px-2 md:px-4 mt-8 md:mt-10">
         <div class="mosaic-grid" id="portfolio-grid">
           <div class="grid-sizer"></div>
@@ -1028,6 +865,12 @@
         if (nextFilter === currentFilter) return;
 
         filterPortfolio(nextFilter);
+
+        const portfolioSection = document.getElementById('portfolio-section');
+        window.scrollTo({
+          top: Math.max(0, portfolioSection.offsetTop - 170),
+          behavior: 'smooth'
+        });
       });
     }
 
