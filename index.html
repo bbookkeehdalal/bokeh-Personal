@@ -493,7 +493,8 @@
           <button id="contact-scroll-btn" class="filter-chip header-side-link">Contact</button>
         </div>
 
-        <p id="tagline" class="font-body text-[10px] md:text-xs tracking-[0.4em] text-black/45 uppercase" style="margin-top: 45px;">
+       <p id="tagline" class="font-body text-[10px] md:text-xs tracking-[0.4em] text-black/45 uppercase" style="margin-top: 78px;">
+
           Life & Travel
         </p>
       </div>
@@ -1015,12 +1016,6 @@
         if (nextFilter === currentFilter) return;
 
         filterPortfolio(nextFilter);
-
-        const portfolioSection = document.getElementById('portfolio-section');
-        window.scrollTo({
-          top: Math.max(0, portfolioSection.offsetTop - 170),
-          behavior: 'smooth'
-        });
       });
     }
 
