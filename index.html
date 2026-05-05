@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="en" class="h-full">
 <head>
@@ -285,37 +284,37 @@
       border-radius: 8px;
       transition: filter 0.2s ease;
     }
-.video-poster-wrap {
-  position: relative;
-  width: 100%;
-  overflow: hidden;
-  border-radius: 8px;
-  background: #f8f8f5;
-}
 
-.video-poster-img {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 8px;
-  opacity: 1;
-  transition: opacity 0.28s ease;
-  background: #f8f8f5;
-}
+    .video-poster-wrap {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+      border-radius: 8px;
+      background: #f8f8f5;
+    }
 
-.video-poster-wrap.video-ready .video-poster-img {
-  opacity: 0;
-  pointer-events: none;
-}
+    .video-poster-img {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 8px;
+      opacity: 1;
+      transition: opacity 0.28s ease;
+      background: #f8f8f5;
+    }
 
-.video-poster-wrap video {
-  position: relative;
-  z-index: 1;
-}
+    .video-poster-wrap.video-ready .video-poster-img {
+      opacity: 0;
+      pointer-events: none;
+    }
 
+    .video-poster-wrap video {
+      position: relative;
+      z-index: 1;
+    }
 
     .grid-item.hidden-by-filter {
       display: none;
@@ -555,6 +554,7 @@
     let singleViewOriginEl = null;
     let singleViewCurrentItem = null;
     let singleViewScrollY = 0;
+    let videoReminderInterval = null;
 
     function shuffleOnce(array) {
       const copy = [...array];
@@ -644,6 +644,8 @@
     }
 
     function forceStartVideo(video) {
+      if (!video) return;
+
       video.muted = true;
       video.loop = true;
       video.playsInline = true;
@@ -654,62 +656,103 @@
       video.setAttribute('playsinline', '');
       video.setAttribute('webkit-playsinline', '');
       video.preload = 'metadata';
+
       video.play().catch(() => {});
     }
 
-function hydrateGridVideo(video) {
-  if (!video) return Promise.resolve();
-
-  const realSrc = video.dataset.realSrc;
-
-  if (realSrc && !video.src) {
-    video.src = realSrc;
-    video.load();
-  }
-
-  forceStartVideo(video);
-
-  return new Promise((resolve) => {
-    const wrap = video.closest('.video-poster-wrap');
-
-    const markReady = () => {
+    function markVideoReady(video) {
+      const wrap = video.closest('.video-poster-wrap');
       if (wrap) wrap.classList.add('video-ready');
-      resolve();
-    };
-
-    if (video.readyState >= 2) {
-      markReady();
-      return;
     }
 
-    video.addEventListener('loadeddata', markReady, { once: true });
-    video.addEventListener('canplay', markReady, { once: true });
+    function hydrateGridVideo(video) {
+      if (!video) return Promise.resolve();
 
-    setTimeout(resolve, 2500);
-  });
-}
+      const realSrc = video.dataset.realSrc;
 
-async function loadGridVideosProgressively(batchSize = 2) {
-  const videos = Array.from(
-    document.querySelectorAll('#portfolio-grid video[data-autoplay="true"]')
-  );
+      if (realSrc && !video.src) {
+        video.src = realSrc;
+        video.load();
+      }
 
-  for (let i = 0; i < videos.length; i += batchSize) {
-    const batch = videos.slice(i, i + batchSize);
-
-    await Promise.all(batch.map(video => hydrateGridVideo(video)));
-
-    await new Promise(resolve => setTimeout(resolve, 120));
-  }
-}
-
-function startAllGridVideos() {
-  document.querySelectorAll('#portfolio-grid video[data-autoplay="true"]').forEach(video => {
-    if (video.src) {
       forceStartVideo(video);
+
+      return new Promise((resolve) => {
+        const markReady = () => {
+          markVideoReady(video);
+          resolve();
+        };
+
+        if (video.readyState >= 2 && !video.paused) {
+          markReady();
+          return;
+        }
+
+        video.addEventListener('playing', markReady, { once: true });
+        video.addEventListener('timeupdate', markReady, { once: true });
+        video.addEventListener('canplay', () => forceStartVideo(video), { once: true });
+
+        setTimeout(resolve, 2500);
+      });
     }
-  });
-}
+
+    async function loadGridVideosProgressively(batchSize = 2) {
+      const videos = Array.from(
+        document.querySelectorAll('#portfolio-grid video[data-autoplay="true"]')
+      );
+
+      for (let i = 0; i < videos.length; i += batchSize) {
+        const batch = videos.slice(i, i + batchSize);
+
+        await Promise.all(batch.map(video => hydrateGridVideo(video)));
+
+        await new Promise(resolve => setTimeout(resolve, 120));
+      }
+    }
+
+    function startAllGridVideos() {
+      if (document.hidden) return;
+
+      document.querySelectorAll('#portfolio-grid video[data-autoplay="true"]').forEach(video => {
+        if (video.dataset.realSrc && !video.src) {
+          video.src = video.dataset.realSrc;
+          video.load();
+        }
+
+        if (video.paused || video.ended || video.readyState < 2) {
+          forceStartVideo(video);
+        } else {
+          markVideoReady(video);
+        }
+      });
+    }
+
+    function startVideoReminder() {
+      if (videoReminderInterval) {
+        clearInterval(videoReminderInterval);
+      }
+
+      videoReminderInterval = setInterval(() => {
+        if (document.hidden) return;
+
+        const videos = document.querySelectorAll('#portfolio-grid video[data-autoplay="true"]');
+
+        if (!videos.length) return;
+
+        videos.forEach(video => {
+          if (video.dataset.realSrc && !video.src) {
+            video.src = video.dataset.realSrc;
+            video.load();
+          }
+
+          if (video.paused || video.ended || video.readyState < 2) {
+            forceStartVideo(video);
+          } else {
+            markVideoReady(video);
+          }
+        });
+      }, 4000);
+    }
 
     async function loadBackendData() {
       const [portfolioRes, categoriesRes] = await Promise.all([
@@ -824,88 +867,89 @@ function startAllGridVideos() {
     }
 
     function renderPortfolioGrid(filter = 'all') {
-  const grid = document.getElementById('portfolio-grid');
-  grid.classList.remove('ready');
+      const grid = document.getElementById('portfolio-grid');
+      grid.classList.remove('ready');
 
-  const items = getGridItemsForFilter(filter);
+      const items = getGridItemsForFilter(filter);
 
-  grid.innerHTML = `<div class="grid-sizer"></div>` + items.map((item, index) => {
-    const delay = Math.min(index * 0.002, 0.08);
-    const ratioStyle = item.aspectRatio ? `aspect-ratio:${item.aspectRatio};` : "";
-    const displaySrc = getDisplaySrc(item);
-    const posterSrc = item.posterSrc || item.previewSrc || '';
+      grid.innerHTML = `<div class="grid-sizer"></div>` + items.map((item, index) => {
+        const delay = Math.min(index * 0.002, 0.08);
+        const ratioStyle = item.aspectRatio ? `aspect-ratio:${item.aspectRatio};` : "";
+        const displaySrc = getDisplaySrc(item);
+        const posterSrc = item.posterSrc || item.previewSrc || '';
 
-    if (item.type === 'video') {
-      return `
-        <div class="grid-item relative fade-in cursor-pointer"
-          style="animation-delay:${delay}s; ${ratioStyle}"
-          data-id="${item.id}"
-          data-category="${item.category || ''}"
-          data-hide-from-all="${item.hideFromAll ? 'true' : 'false'}"
-          data-video-src="${item.src}">
-          <div class="video-poster-wrap" style="${ratioStyle}">
-            ${posterSrc ? `
-              <img
-                class="video-poster-img"
-                src="${posterSrc}"
-                alt=""
-                loading="${index < 8 ? 'eager' : 'lazy'}"
-                decoding="async"
-                fetchpriority="${index < 4 ? 'high' : 'auto'}"
-              />
-            ` : ''}
-            <video
+        if (item.type === 'video') {
+          return `
+            <div class="grid-item relative fade-in cursor-pointer"
+              style="animation-delay:${delay}s; ${ratioStyle}"
+              data-id="${item.id}"
+              data-category="${item.category || ''}"
+              data-hide-from-all="${item.hideFromAll ? 'true' : 'false'}"
+              data-video-src="${item.src}">
+              <div class="video-poster-wrap" style="${ratioStyle}">
+                ${posterSrc ? `
+                  <img
+                    class="video-poster-img"
+                    src="${posterSrc}"
+                    alt=""
+                    loading="${index < 8 ? 'eager' : 'lazy'}"
+                    decoding="async"
+                    fetchpriority="${index < 4 ? 'high' : 'auto'}"
+                  />
+                ` : ''}
+                <video
+                  class="block w-full h-auto"
+                  data-real-src="${displaySrc}"
+                  poster="${posterSrc}"
+                  muted
+                  loop
+                  autoplay
+                  playsinline
+                  webkit-playsinline
+                  preload="none"
+                  data-autoplay="true"
+                ></video>
+              </div>
+              <div class="absolute inset-0 bg-gradient-to-t from-white/10 to-transparent opacity-0 hover:opacity-100 transition-opacity"></div>
+            </div>
+          `;
+        }
+
+        return `
+          <div class="grid-item relative fade-in cursor-pointer"
+            style="animation-delay:${delay}s; ${ratioStyle}"
+            data-id="${item.id}"
+            data-category="${item.category || ''}"
+            data-hide-from-all="${item.hideFromAll ? 'true' : 'false'}">
+            <img
               class="block w-full h-auto"
-              data-real-src="${displaySrc}"
-              poster="${posterSrc}"
-              muted
-              loop
-              autoplay
-              playsinline
-              webkit-playsinline
-              preload="none"
-              data-autoplay="true"
-            ></video>
+              src="${displaySrc}"
+              alt=""
+              loading="${index < 8 ? 'eager' : 'lazy'}"
+              decoding="async"
+              fetchpriority="${index < 4 ? 'high' : 'auto'}"
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-white/10 to-transparent opacity-0 hover:opacity-100 transition-opacity"></div>
           </div>
-          <div class="absolute inset-0 bg-gradient-to-t from-white/10 to-transparent opacity-0 hover:opacity-100 transition-opacity"></div>
-        </div>
-      `;
+        `;
+      }).join('');
+
+      setupVideoExpansion();
+
+      grid.querySelectorAll('.grid-item:not([data-video-src])').forEach(el => {
+        el.addEventListener('click', () => {
+          const id = el.dataset.id;
+          const item = portfolioItems.find(x => String(x.id) === String(id));
+          if (item) openSingleView(item, el);
+        });
+      });
+
+      requestAnimationFrame(() => {
+        grid.classList.add('ready');
+        loadGridVideosProgressively(2);
+        startVideoReminder();
+      });
     }
-
-    return `
-      <div class="grid-item relative fade-in cursor-pointer"
-        style="animation-delay:${delay}s; ${ratioStyle}"
-        data-id="${item.id}"
-        data-category="${item.category || ''}"
-        data-hide-from-all="${item.hideFromAll ? 'true' : 'false'}">
-        <img
-          class="block w-full h-auto"
-          src="${displaySrc}"
-          alt=""
-          loading="${index < 8 ? 'eager' : 'lazy'}"
-          decoding="async"
-          fetchpriority="${index < 4 ? 'high' : 'auto'}"
-        />
-        <div class="absolute inset-0 bg-gradient-to-t from-white/10 to-transparent opacity-0 hover:opacity-100 transition-opacity"></div>
-      </div>
-    `;
-  }).join('');
-
-  setupVideoExpansion();
-
-  grid.querySelectorAll('.grid-item:not([data-video-src])').forEach(el => {
-    el.addEventListener('click', () => {
-      const id = el.dataset.id;
-      const item = portfolioItems.find(x => String(x.id) === String(id));
-      if (item) openSingleView(item, el);
-    });
-  });
-
-  requestAnimationFrame(() => {
-    grid.classList.add('ready');
-    loadGridVideosProgressively(2);
-  });
-}
 
     function filterPortfolio(filter) {
       currentFilter = filter;
@@ -984,6 +1028,9 @@ function startAllGridVideos() {
       clone.classList.add('single-zoom-clone');
 
       if (item.type === 'video') {
+        if (clone.dataset && clone.dataset.realSrc && !clone.src) {
+          clone.src = clone.dataset.realSrc;
+        }
         forceStartVideo(clone);
       }
 
@@ -1220,32 +1267,30 @@ function startAllGridVideos() {
     }
 
     async function init() {
-  const loadingPromise = (async () => {
-    try {
-      const siteConfig = await loadSiteConfig();
-      await onConfigChange(siteConfig);
-      await loadBackendData();
+      const loadingPromise = (async () => {
+        try {
+          const siteConfig = await loadSiteConfig();
+          await onConfigChange(siteConfig);
+          await loadBackendData();
 
-      renderCategoryFilters();
-      renderPortfolioGrid();
-      renderClientsGrid();
-      setupFilters();
-    } catch (err) {
-      console.error("Backend load error:", err);
+          renderCategoryFilters();
+          renderPortfolioGrid();
+          setupFilters();
+        } catch (err) {
+          console.error("Backend load error:", err);
 
-      renderCategoryFilters();
-      renderPortfolioGrid();
-      renderClientsGrid();
-      setupFilters();
+          renderCategoryFilters();
+          renderPortfolioGrid();
+          setupFilters();
+        }
+      })();
+
+      initSplashScreen();
+
+      await loadingPromise;
     }
-  })();
 
-  initSplashScreen();
-
-  await loadingPromise;
-}
-
-init();
+    init();
   </script>
 </body>
 </html>
