@@ -1128,27 +1128,32 @@
     }
 
     async function init() {
-      try {
-        const siteConfig = await loadSiteConfig();
-        await onConfigChange(siteConfig);
-      } catch (err) {
-        console.error("Site config error:", err);
-      }
-
-      initSplashScreen();
-
-      try {
-        await loadBackendData();
-      } catch (err) {
-        console.error("Backend load error:", err);
-      }
+  const loadingPromise = (async () => {
+    try {
+      const siteConfig = await loadSiteConfig();
+      await onConfigChange(siteConfig);
+      await loadBackendData();
 
       renderCategoryFilters();
       renderPortfolioGrid();
+      renderClientsGrid();
+      setupFilters();
+    } catch (err) {
+      console.error("Backend load error:", err);
+
+      renderCategoryFilters();
+      renderPortfolioGrid();
+      renderClientsGrid();
       setupFilters();
     }
+  })();
 
-    init();
+  initSplashScreen();
+
+  await loadingPromise;
+}
+
+init();
   </script>
 </body>
 </html>
