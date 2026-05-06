@@ -46,19 +46,16 @@
 .logo-glow::before {
   content: "";
   position: absolute;
-  width: 420px;
-  height: 420px;
+  width: 520px;
+  height: 520px;
   left: 50%;
-  top: 43%;
+  top: 40%;
   transform: translate(-50%, -50%);
-  background: radial-gradient(
-    circle,
-    rgba(220, 185, 135, 0.28) 0%,
-    rgba(245, 225, 195, 0.18) 34%,
-    rgba(255, 245, 230, 0.10) 52%,
-    transparent 72%
-  );
-  filter: blur(28px);
+  background:
+    radial-gradient(circle, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.55) 10%, rgba(255,255,255,0.00) 24%),
+    radial-gradient(circle, rgba(255,220,170,0.34) 0%, rgba(255,220,170,0.16) 28%, rgba(255,220,170,0.00) 58%),
+    radial-gradient(circle, rgba(255,245,235,0.32) 0%, rgba(255,245,235,0.10) 42%, transparent 72%);
+  filter: blur(34px);
   opacity: 0;
   animation: centerHaze 3s ease-out forwards;
 }
@@ -67,23 +64,25 @@
 .logo-glow::after {
   content: "";
   position: absolute;
-  width: 38%;
-  height: 160%;
-  left: -45%;
-  top: -30%;
-  transform: rotate(24deg);
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(220,185,135,0.04) 35%,
-    rgba(220,185,135,0.20) 50%,
-    rgba(255,255,255,0.38) 54%,
-    rgba(220,185,135,0.08) 65%,
-    transparent 100%
-  );
-  filter: blur(16px);
+  width: 72%;
+  height: 140px;
+  left: 14%;
+  top: 40%;
+  transform: translateY(-50%);
+  background:
+    linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255,220,170,0.00) 12%,
+      rgba(255,220,170,0.10) 28%,
+      rgba(255,255,255,0.88) 50%,
+      rgba(255,220,170,0.12) 72%,
+      rgba(255,220,170,0.00) 88%,
+      transparent 100%
+    );
+  filter: blur(10px);
   opacity: 0;
-  animation: luxurySweep 3s ease-out forwards;
+  animation: flareLine 3s ease-out forwards;
 }
 
 
@@ -91,49 +90,49 @@
   position: absolute;
   border-radius: 50%;
   opacity: 0;
-  mix-blend-mode: multiply;
+  mix-blend-mode: normal;
   transform: translate(-50%, -50%) scale(0.75);
   animation: glareFloat 3s ease-out forwards;
 }
 
 .bokeh-glare:nth-child(1) {
-  width: 190px;
-  height: 190px;
-  filter: blur(30px);
-  background: radial-gradient(circle, rgba(220,185,135,0.24) 0%, rgba(220,185,135,0.10) 40%, transparent 74%);
-  top: 37%;
+  width: 220px;
+  height: 220px;
+  filter: blur(34px);
+  background: radial-gradient(circle, rgba(255,223,186,0.28) 0%, rgba(255,223,186,0.10) 42%, transparent 76%);
+  top: 34%;
   left: 42%;
   animation-delay: 0.05s;
 }
 
 .bokeh-glare:nth-child(2) {
-  width: 140px;
-  height: 140px;
+  width: 145px;
+  height: 145px;
   filter: blur(24px);
-  background: radial-gradient(circle, rgba(190,150,115,0.18) 0%, rgba(190,150,115,0.07) 42%, transparent 74%);
-  top: 44%;
+  background: radial-gradient(circle, rgba(255,255,255,0.70) 0%, rgba(255,255,255,0.18) 35%, transparent 72%);
+  top: 40%;
   left: 55%;
-  animation-delay: 0.14s;
+  animation-delay: 0.16s;
 }
 
 .bokeh-glare:nth-child(3) {
-  width: 230px;
-  height: 230px;
-  filter: blur(38px);
-  background: radial-gradient(circle, rgba(245,215,175,0.22) 0%, rgba(245,215,175,0.08) 42%, transparent 76%);
-  top: 31%;
+  width: 260px;
+  height: 260px;
+  filter: blur(44px);
+  background: radial-gradient(circle, rgba(245,210,170,0.22) 0%, rgba(245,210,170,0.08) 42%, transparent 76%);
+  top: 28%;
   left: 51%;
-  animation-delay: 0.23s;
+  animation-delay: 0.24s;
 }
 
 .bokeh-glare:nth-child(4) {
-  width: 95px;
-  height: 95px;
+  width: 100px;
+  height: 100px;
   filter: blur(18px);
-  background: radial-gradient(circle, rgba(160,120,90,0.14) 0%, rgba(160,120,90,0.05) 45%, transparent 72%);
-  top: 34%;
-  left: 60%;
-  animation-delay: 0.32s;
+  background: radial-gradient(circle, rgba(255,235,210,0.34) 0%, rgba(255,235,210,0.09) 42%, transparent 74%);
+  top: 31%;
+  left: 61%;
+  animation-delay: 0.34s;
 }
 
 @keyframes glareFloat {
@@ -204,7 +203,7 @@
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  animation: logoEntrance 0.8s ease-out, logoPulse 2s ease-in-out infinite;
+  animation: logoEntrance 0.9s ease-out, logoPulseLight 3s ease-in-out infinite;
   background: transparent;
   mix-blend-mode: multiply;
   will-change: top, transform, opacity;
@@ -212,7 +211,19 @@
 
 
     @keyframes logoEntrance { from { opacity: 0; transform: translate(-50%, -50%) scale(0.8); } to { opacity: 1; transform: translate(-50%, -50%) scale(1); } }
+@keyframes logoPulseLight {
+  0%, 100% {
+    filter:
+      drop-shadow(0 0 10px rgba(255,255,255,0.75))
+      drop-shadow(0 0 18px rgba(255,220,170,0.18));
+  }
 
+  50% {
+    filter:
+      drop-shadow(0 0 18px rgba(255,255,255,0.95))
+      drop-shadow(0 0 34px rgba(255,220,170,0.28));
+  }
+}
 
     #splash-logo.shrink-to-header {
       animation: shrinkToHeader 1.15s cubic-bezier(0.4, 0, 0.2, 1) forwards;
@@ -232,7 +243,27 @@
         visibility: visible;
       }
     }
+@keyframes flareLine {
+  0% {
+    opacity: 0;
+    transform: translateY(-50%) scaleX(0.65);
+  }
 
+  25% {
+    opacity: 1;
+  }
+
+  55% {
+    opacity: 0.95;
+    transform: translateY(-50%) scaleX(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(-50%) scaleX(1.08);
+  }
+}
+    
     #splash-logo.fade-out-splash {
       opacity: 0;
       transition: none !important;
