@@ -209,7 +209,74 @@
   will-change: top, transform, opacity;
 }
 
+.logo-light-hit {
+  position: fixed;
+  z-index: 20;
+  left: 50%;
+  top: 50%;
+  width: min(80vw, 300px);
+  height: 120px;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  overflow: hidden;
+  opacity: 1;
+  mix-blend-mode: screen;
+  animation: logoLightLayerFade 3s ease-out forwards;
+}
 
+/* the light that crosses ONLY the logo area */
+.logo-light-hit::before {
+  content: "";
+  position: absolute;
+  top: -35%;
+  left: -55%;
+  width: 42%;
+  height: 170%;
+  transform: rotate(22deg);
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255,255,255,0.00) 25%,
+    rgba(255,255,255,0.55) 42%,
+    rgba(255,255,255,1.00) 50%,
+    rgba(255,255,255,0.55) 58%,
+    rgba(255,255,255,0.00) 75%,
+    transparent 100%
+  );
+  filter: blur(5px);
+  animation: logoLightPass 2.4s ease-out forwards;
+}
+
+@keyframes logoLightPass {
+  0% {
+    left: -55%;
+    opacity: 0;
+  }
+
+  18% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    left: 115%;
+    opacity: 0;
+  }
+}
+
+@keyframes logoLightLayerFade {
+  0%, 80% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+    
     @keyframes logoEntrance { from { opacity: 0; transform: translate(-50%, -50%) scale(0.8); } to { opacity: 1; transform: translate(-50%, -50%) scale(1); } }
 @keyframes logoPulseLight {
   0%, 100% {
@@ -506,6 +573,7 @@
   <div id="splash-screen">
     <div class="logo-glow" id="logo-glow"></div>
     <img id="splash-logo" class="logo-pulse" src="./assets/logo2.png" alt="Bokeh Life & Travel">
+    <div class="logo-light-hit"></div>
   </div>
 
   <div id="app" class="min-h-full flex flex-col">
@@ -898,8 +966,15 @@
   // 1.35s: logo starts moving to header
   setTimeout(() => {
     splashLogo.classList.add('shrink-to-header');
-    logoGlow.style.transition = 'opacity 0.45s ease';
+    logoGlow.style.transition = 'opacity 0.65s ease';
     logoGlow.style.opacity = '0';
+    
+    const logoLightHit = document.querySelector('.logo-light-hit');
+  if (logoLightHit) {
+    logoLightHit.style.transition = 'opacity 0.35s ease';
+    logoLightHit.style.opacity = '0';
+  }
+    
   }, 1350);
 
   // 2.75s: header logo appears and splash fades
