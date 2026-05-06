@@ -22,7 +22,7 @@
       position: fixed;
       inset: 0;
       z-index: 9999;
-      background: #f8f8f5;
+      background: #fff;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -35,115 +35,183 @@
     }
 
     .logo-glow {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      pointer-events: none;
-      overflow: hidden;
-    }
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  opacity: 1;
+}
 
-    .bokeh-glare {
-      position: absolute;
-      border-radius: 50%;
-      opacity: 0;
-      mix-blend-mode: multiply;
-      animation: glareFloat 3s ease-in-out infinite;
-    }
+/* Soft cinematic haze behind logo */
+.logo-glow::before {
+  content: "";
+  position: absolute;
+  width: 360px;
+  height: 360px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(255,255,255,0.13) 0%, rgba(255,255,255,0.04) 34%, transparent 68%);
+  filter: blur(22px);
+  opacity: 0;
+  animation: centerHaze 3s ease-out forwards;
+}
 
-    .bokeh-glare:nth-child(1) {
-      width: 155px;
-      height: 155px;
-      filter: blur(24px);
-      background: radial-gradient(circle, rgba(255, 0, 150, 0.62) 0%, rgba(255, 0, 150, 0.22) 38%, transparent 72%);
-      top: 38%;
-      left: 43%;
-      animation-delay: 0s;
-    }
+/* Elegant moving glare line */
+.logo-glow::after {
+  content: "";
+  position: absolute;
+  width: 34%;
+  height: 160%;
+  left: -45%;
+  top: -30%;
+  transform: rotate(24deg);
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(0,0,0,0.02) 38%,
+    rgba(0,0,0,0.10) 50%,
+    rgba(0,0,0,0.02) 62%,
+    transparent 100%
+  );
+  filter: blur(14px);
+  opacity: 0;
+  animation: luxurySweep 3s ease-out forwards;
+}
 
-    .bokeh-glare:nth-child(2) {
-      width: 135px;
-      height: 135px;
-      filter: blur(22px);
-      background: radial-gradient(circle, rgba(255, 174, 0, 0.58) 0%, rgba(255, 174, 0, 0.2) 40%, transparent 72%);
-      top: 42%;
-      left: 49%;
-      animation-delay: 0.35s;
-    }
+.bokeh-glare {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0;
+  mix-blend-mode: screen;
+  transform: translate(-50%, -50%) scale(0.75);
+  animation: glareFloat 3s ease-out forwards;
+}
 
-    .bokeh-glare:nth-child(3) {
-      width: 125px;
-      height: 125px;
-      filter: blur(20px);
-      background: radial-gradient(circle, rgba(80, 120, 255, 0.42) 0%, rgba(80, 120, 255, 0.14) 42%, transparent 72%);
-      top: 45%;
-      left: 46%;
-      animation-delay: 0.7s;
-    }
+/* Main white lens bokeh */
+.bokeh-glare:nth-child(1) {
+  width: 170px;
+  height: 170px;
+  filter: blur(26px);
+  background: radial-gradient(circle, rgba(255,255,255,0.28) 0%, rgba(255,255,255,0.10) 38%, transparent 72%);
+  top: 42%;
+  left: 42%;
+  animation-delay: 0.05s;
+}
 
-    .bokeh-glare:nth-child(4) {
-      width: 105px;
-      height: 105px;
-      filter: blur(18px);
-      background: radial-gradient(circle, rgba(0, 0, 0, 0.26) 0%, rgba(0, 0, 0, 0.09) 45%, transparent 72%);
-      top: 36%;
-      left: 52%;
-      animation-delay: 1.05s;
-    }
+/* Warm champagne bokeh */
+.bokeh-glare:nth-child(2) {
+  width: 125px;
+  height: 125px;
+  filter: blur(24px);
+  background: radial-gradient(circle, rgba(255,205,150,0.22) 0%, rgba(255,205,150,0.08) 42%, transparent 74%);
+  top: 46%;
+  left: 54%;
+  animation-delay: 0.14s;
+}
 
-    .bokeh-glare:nth-child(5) {
-      width: 185px;
-      height: 185px;
-      filter: blur(34px);
-      background: radial-gradient(circle, rgba(180, 180, 180, 0.55) 0%, rgba(180, 180, 180, 0.18) 40%, transparent 76%);
-      top: 41%;
-      left: 47%;
-      animation-delay: 1.25s;
-    }
+/* Soft silver bokeh */
+.bokeh-glare:nth-child(3) {
+  width: 210px;
+  height: 210px;
+  filter: blur(36px);
+  background: radial-gradient(circle, rgba(210,210,210,0.18) 0%, rgba(210,210,210,0.07) 40%, transparent 76%);
+  top: 38%;
+  left: 50%;
+  animation-delay: 0.23s;
+}
 
-    @keyframes glareFloat {
-      0%, 100% {
-        opacity: 0;
-        transform: translate(-50%, -50%) scale(0.72);
-      }
-      45%, 60% {
-        opacity: 1;
-        transform: translate(-50%, -50%) scale(1.28);
-      }
-    }
+/* Small lens dot */
+.bokeh-glare:nth-child(4) {
+  width: 90px;
+  height: 90px;
+  filter: blur(18px);
+  background: radial-gradient(circle, rgba(255,255,255,0.16) 0%, rgba(255,255,255,0.06) 45%, transparent 72%);
+  top: 34%;
+  left: 58%;
+  animation-delay: 0.32s;
+}
+
+@keyframes glareFloat {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.65) translateY(18px);
+  }
+
+  28% {
+    opacity: 1;
+  }
+
+  62% {
+    opacity: 0.8;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.22) translateY(-18px);
+  }
+}
+
+@keyframes centerHaze {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.7);
+  }
+
+  35% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.25);
+  }
+}
+
+@keyframes luxurySweep {
+  0% {
+    left: -45%;
+    opacity: 0;
+  }
+
+  28% {
+    opacity: 1;
+  }
+
+  100% {
+    left: 115%;
+    opacity: 0;
+  }
+}
+
 
     .logo-pulse {
       animation: logoPulse 2s ease-in-out infinite;
     }
 
-    @keyframes logoPulse {
-      0%, 100% { filter: drop-shadow(0 0 22px rgba(0,0,0,0.18)); }
-      50% { filter: drop-shadow(0 0 55px rgba(0,0,0,0.38)); }
-    }
+    @keyframes logoPulse { 0%, 100% { filter: drop-shadow(0 0 20px rgba(255,255,255,0.3)); } 50% { filter: drop-shadow(0 0 40px rgba(255,255,255,0.6)); } }
 
     #splash-logo {
-      position: fixed;
-      z-index: 10;
-      max-width: 300px;
-      width: 80%;
-      height: auto;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
-      animation: logoEntrance 1s ease-out, logoPulse 2s ease-in-out infinite;
-      background: transparent;
-      mix-blend-mode: multiply;
-      will-change: top, transform, opacity;
-    }
+  position: fixed;
+  z-index: 10;
+  max-width: 300px;
+  width: 80%;
+  height: auto;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  animation: logoEntrance 0.8s ease-out, logoPulse 2s ease-in-out infinite;
+  background: transparent;
+  mix-blend-mode: multiply;
+  will-change: top, transform, opacity;
+}
 
-    @keyframes logoEntrance {
-      from { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
-      to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-    }
+
+    @keyframes logoEntrance { from { opacity: 0; transform: translate(-50%, -50%) scale(0.8); } to { opacity: 1; transform: translate(-50%, -50%) scale(1); } }
+
 
     #splash-logo.shrink-to-header {
-      animation: shrinkToHeader 0.9s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+      animation: shrinkToHeader 1.15s cubic-bezier(0.4, 0, 0.2, 1) forwards;
     }
 
     @keyframes shrinkToHeader {
@@ -166,20 +234,7 @@
       transition: none !important;
     }
 
-    #header-logo {
-      position: fixed;
-      top: 0px;
-      left: 50%;
-      transform: translate(-50%, -20px) scale(0.65);
-      max-width: 300px;
-      width: 80%;
-      height: auto;
-      z-index: 50;
-      opacity: 0;
-      mix-blend-mode: multiply;
-      cursor: default;
-      transition: opacity 0.15s ease;
-    }
+    #header-logo { position: fixed; top: 0px; left: 50%; transform: translate(-50%, -20px) scale(0.65); max-width: 300px; width: 80%; height: auto; z-index: 50; opacity: 0; mix-blend-mode: multiply; cursor: default; transition: opacity 0.5s ease; }
 
     #header-logo.visible {
       opacity: 1;
@@ -792,40 +847,39 @@
     }
 
     function initSplashScreen() {
-      const splashScreen = document.getElementById('splash-screen');
-      const splashLogo = document.getElementById('splash-logo');
-      const headerLogo = document.getElementById('header-logo');
-      const mainContent = document.getElementById('main-content');
-      const logoGlow = document.getElementById('logo-glow');
+  const splashScreen = document.getElementById('splash-screen');
+  const splashLogo = document.getElementById('splash-logo');
+  const headerLogo = document.getElementById('header-logo');
+  const mainContent = document.getElementById('main-content');
+  const logoGlow = document.getElementById('logo-glow');
 
-      logoGlow.innerHTML = '';
+  // Create 4 elegant bokeh circles
+  for (let i = 0; i < 4; i++) {
+    const glare = document.createElement('div');
+    glare.className = 'bokeh-glare';
+    logoGlow.appendChild(glare);
+  }
 
-      for (let i = 0; i < 5; i++) {
-        const glare = document.createElement('div');
-        glare.className = 'bokeh-glare';
-        logoGlow.appendChild(glare);
-      }
+  // 1.35s: logo starts moving to header
+  setTimeout(() => {
+    splashLogo.classList.add('shrink-to-header');
+    logoGlow.style.transition = 'opacity 0.45s ease';
+    logoGlow.style.opacity = '0';
+  }, 1350);
 
-      setTimeout(() => {
-        splashLogo.classList.add('shrink-to-header');
+  // 2.75s: header logo appears and splash fades
+  setTimeout(() => {
+    splashLogo.classList.add('fade-out-splash');
+    headerLogo.classList.add('visible');
+    splashScreen.classList.add('fade-out');
+    mainContent.classList.add('visible');
+  }, 2750);
 
-        logoGlow.style.transition = 'opacity 0.45s ease';
-        logoGlow.style.opacity = '0';
-
-        setTimeout(() => {
-          headerLogo.classList.add('visible');
-
-          splashLogo.classList.add('fade-out-splash');
-
-          splashScreen.classList.add('fade-out');
-          mainContent.classList.add('visible');
-
-          setTimeout(() => {
-            splashScreen.style.display = 'none';
-          }, 650);
-        }, 900);
-      }, 2500);
-    }
+  // 3.35s: remove splash from page after fade
+  setTimeout(() => {
+    splashScreen.style.display = 'none';
+  }, 3350);
+}
 
     function renderCategoryFilters() {
       const container = document.getElementById('filter-container');
