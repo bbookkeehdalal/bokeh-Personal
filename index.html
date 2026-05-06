@@ -52,8 +52,8 @@
   top: 39%;
   transform: translate(-50%, -50%);
   background:
-    radial-gradient(circle, rgba(214, 170, 105, 0.22) 0%, rgba(214, 170, 105, 0.10) 30%, transparent 64%),
-    radial-gradient(circle, rgba(120, 90, 60, 0.08) 0%, rgba(120, 90, 60, 0.04) 38%, transparent 70%);
+    radial-gradient(circle, rgba(0, 0, 0, 0.10) 0%, rgba(0, 0, 0, 0.045) 32%, transparent 68%),
+    radial-gradient(circle, rgba(255, 255, 255, 0.85) 0%, rgba(255, 255, 255, 0.20) 18%, transparent 42%);
   filter: blur(30px);
   opacity: 0;
   animation: centerHaze 3s ease-out forwards;
@@ -71,14 +71,14 @@
   background: linear-gradient(
     90deg,
     transparent 0%,
-    rgba(180, 130, 75, 0.00) 32%,
-    rgba(180, 130, 75, 0.10) 43%,
-    rgba(255, 245, 225, 0.95) 50%,
-    rgba(180, 130, 75, 0.12) 57%,
-    rgba(180, 130, 75, 0.00) 68%,
+    rgba(0, 0, 0, 0.00) 32%,
+    rgba(0, 0, 0, 0.06) 42%,
+    rgba(255, 255, 255, 1) 50%,
+    rgba(0, 0, 0, 0.06) 58%,
+    rgba(0, 0, 0, 0.00) 68%,
     transparent 100%
   );
-  filter: blur(13px);
+  filter: blur(12px);
   opacity: 0;
   mix-blend-mode: multiply;
   animation: luxurySweep 3s ease-out forwards;
@@ -98,7 +98,7 @@
   width: 180px;
   height: 180px;
   filter: blur(28px);
-  background: radial-gradient(circle, rgba(190, 140, 80, 0.18) 0%, rgba(190, 140, 80, 0.08) 40%, transparent 74%);
+  background: radial-gradient(circle, rgba(0, 0, 0, 0.10) 0%, rgba(0, 0, 0, 0.04) 40%, transparent 74%);
   top: 37%;
   left: 43%;
   animation-delay: 0.05s;
@@ -108,7 +108,7 @@
   width: 130px;
   height: 130px;
   filter: blur(22px);
-  background: radial-gradient(circle, rgba(110, 80, 50, 0.12) 0%, rgba(110, 80, 50, 0.05) 42%, transparent 74%);
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.85) 0%, rgba(0, 0, 0, 0.035) 42%, transparent 74%);
   top: 42%;
   left: 54%;
   animation-delay: 0.14s;
@@ -118,7 +118,7 @@
   width: 220px;
   height: 220px;
   filter: blur(36px);
-  background: radial-gradient(circle, rgba(220, 185, 130, 0.16) 0%, rgba(220, 185, 130, 0.06) 42%, transparent 76%);
+  background: radial-gradient(circle, rgba(0, 0, 0, 0.075) 0%, rgba(0, 0, 0, 0.03) 42%, transparent 76%);
   top: 32%;
   left: 50%;
   animation-delay: 0.23s;
@@ -128,11 +128,12 @@
   width: 90px;
   height: 90px;
   filter: blur(18px);
-  background: radial-gradient(circle, rgba(80, 60, 40, 0.10) 0%, rgba(80, 60, 40, 0.04) 45%, transparent 72%);
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.95) 0%, rgba(0, 0, 0, 0.025) 45%, transparent 72%);
   top: 31%;
   left: 59%;
   animation-delay: 0.32s;
 }
+
 
 @keyframes glareFloat {
   0% {
@@ -213,14 +214,14 @@
 @keyframes logoPulseLight {
   0%, 100% {
     filter:
-      drop-shadow(0 8px 18px rgba(120, 90, 55, 0.12))
-      drop-shadow(0 0 18px rgba(210, 165, 95, 0.12));
+      drop-shadow(0 8px 18px rgba(0, 0, 0, 0.10))
+      drop-shadow(0 0 12px rgba(255, 255, 255, 0.75));
   }
 
   50% {
     filter:
-      drop-shadow(0 10px 26px rgba(120, 90, 55, 0.18))
-      drop-shadow(0 0 34px rgba(210, 165, 95, 0.22));
+      drop-shadow(0 10px 28px rgba(0, 0, 0, 0.18))
+      drop-shadow(0 0 30px rgba(255, 255, 255, 1));
   }
 }
 
