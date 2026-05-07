@@ -545,8 +545,9 @@
   color: rgba(0,0,0,0.55);
   text-decoration: none;
   position: absolute;
-  right: 0;
-  top: 34px;
+  left: 50%;
+  top: 72px;
+  transform: translateX(-50%);
 
   display: inline-flex;
   align-items: center;
@@ -588,6 +589,9 @@
   .portfolio-redirect-link {
     font-size: 14px;
     top: 0px;
+    left: auto;
+    right: 0;
+    transform: none;
   }
 }
 
@@ -1011,40 +1015,41 @@ logoGlow.appendChild(logoSpark);
   }, 3350);
 }
 
-    function renderCategoryFilters() {
-      const container = document.getElementById('filter-container');
+function renderCategoryFilters() {
+  const container = document.getElementById('filter-container');
 
-      const filterItems = [
-        { label: 'All', slug: 'all' },
-        ...categories.filter(cat => cat.slug).map(cat => ({
-          label: cat.label,
-          slug: cat.slug
-        }))
-      ];
+  const filterItems = [
+    { label: 'All', slug: 'all' },
+    ...categories.filter(cat => cat.slug).map(cat => ({
+      label: cat.label,
+      slug: cat.slug
+    }))
+  ];
 
-      container.innerHTML = filterItems.map((cat, index) => {
-        const activeClass = index === 0 ? 'active' : '';
+  const filtersHTML = filterItems.map((cat, index) => {
+    const activeClass = index === 0 ? 'active' : '';
 
-        const button = `
-          <button class="filter-chip ${activeClass} text-[11px] md:text-sm tracking-wide uppercase" data-filter="${cat.slug}">
-            ${cat.label}
-          </button>
-        `;
+    const button = `
+      <button class="filter-chip ${activeClass} text-[11px] md:text-sm tracking-wide uppercase" data-filter="${cat.slug}">
+        ${cat.label}
+      </button>
+    `;
 
-        const divider = index < filterItems.length - 1
-          ? `<span class="filter-divider">|</span>`
-          : '';
+    const divider = index < filterItems.length - 1
+      ? `<span class="filter-divider">|</span>`
+      : '';
 
-        return button + divider;
-      }).join('');
+    return button + divider;
+  }).join('');
 
-const commercialLink = `
-  <a href="https://bokehbysaad.com" class="portfolio-redirect-link">
-    COMMERCIAL→ <span aria-hidden="true"></span>
-  </a>
-`;
-      
-    }
+  const commercialLink = `
+    <a href="https://bokehbysaad.com" class="portfolio-redirect-link">
+      COMMERCIAL→ <span aria-hidden="true"></span>
+    </a>
+  `;
+
+  container.innerHTML = filtersHTML + commercialLink;
+}
 
     function getGridItemsForFilter(filter) {
       return filter === 'all'
