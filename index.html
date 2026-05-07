@@ -537,22 +537,25 @@
       background: #f8f8f5;
     }
 
-    #filter-container {
+   #filter-container {
   position: relative;
+}
+
+.portfolio-redirect-wrap {
+  flex-basis: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 6px;
 }
 
 .portfolio-redirect-link {
   color: rgba(0,0,0,0.55);
   text-decoration: none;
-
   position: relative;
-  flex-basis: 100%;
-  justify-content: center;
-  margin-top: 6px;
 
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 0;
 
   font-family: 'Inter', -apple-system, sans-serif;
   font-size: 11px;
@@ -562,16 +565,17 @@
   line-height: 1;
 
   padding: 0;
+  margin: 0;
 
   transition: color 0.12s ease, opacity 0.12s ease;
 }
-    
+
 .portfolio-redirect-link::after {
   content: "";
   position: absolute;
   left: 0;
   bottom: -2px;
-  width: calc(100% - 13px);
+  width: 100%;
   height: 1px;
   background: rgba(0,0,0,0.55);
   transition: background 0.16s ease;
@@ -586,13 +590,16 @@
 }
 
 @media (min-width: 768px) {
-  .portfolio-redirect-link {
+  .portfolio-redirect-wrap {
     position: absolute;
     right: 0;
-    top: 0px;
+    top: 0;
     flex-basis: auto;
-    justify-content: flex-start;
+    display: block;
     margin-top: 0;
+  }
+
+  .portfolio-redirect-link {
     font-size: 14px;
   }
 }
@@ -1044,11 +1051,13 @@ function renderCategoryFilters() {
     return button + divider;
   }).join('');
 
-  const commercialLink = `
+const commercialLink = `
+  <div class="portfolio-redirect-wrap">
     <a href="https://bokehbysaad.com" class="portfolio-redirect-link">
-      COMMERCIAL→ <span aria-hidden="true"></span>
+      COMMERCIAL→
     </a>
-  `;
+  </div>
+`;
 
   container.innerHTML = filtersHTML + commercialLink;
 }
