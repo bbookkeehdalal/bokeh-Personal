@@ -544,10 +544,11 @@
 .portfolio-redirect-link {
   color: rgba(0,0,0,0.55);
   text-decoration: none;
-  position: absolute;
-  left: 50%;
-  top: 72px;
-  transform: translateX(-50%);
+
+  position: relative;
+  flex-basis: 100%;
+  justify-content: center;
+  margin-top: 6px;
 
   display: inline-flex;
   align-items: center;
@@ -561,11 +562,10 @@
   line-height: 1;
 
   padding: 0;
-  margin: 0;
 
   transition: color 0.12s ease, opacity 0.12s ease;
 }
-
+    
 .portfolio-redirect-link::after {
   content: "";
   position: absolute;
@@ -587,11 +587,13 @@
 
 @media (min-width: 768px) {
   .portfolio-redirect-link {
-    font-size: 14px;
-    top: 0px;
-    left: auto;
+    position: absolute;
     right: 0;
-    transform: none;
+    top: 0px;
+    flex-basis: auto;
+    justify-content: flex-start;
+    margin-top: 0;
+    font-size: 14px;
   }
 }
 
